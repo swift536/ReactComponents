@@ -1,0 +1,30 @@
+.container {
+    position: absolute;
+    right: 0px;
+    top: .5%;
+    height: 99%;
+    width: 10px;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.scrollContainer {
+    background-color: white;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.scrollContainer:hover {
+    background-color: rgb(190, 190, 190);
+}
+
+.scrollContainer:active {
+    cursor: grab;
+}
+
+.mouseDown {
+    background-color: rgb(128, 128, 128);
+}

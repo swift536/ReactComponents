@@ -1,0 +1,21 @@
+.viewPort {
+    position: relative;
+    width: 510px;
+    height: 200px;
+    border: solid 1px;
+    overflow-y: scroll;
+  }
+  
+  .itemContainer {
+    position: absolute;
+    width: 500px;
+    background-color: azure;
+  }
+  
+  .item {
+    position: absolute;
+    background-color: beige;
+    border: solid 1px;
+    width: 500px;
+    text-align:center;
+  }
