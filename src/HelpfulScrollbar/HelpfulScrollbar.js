@@ -11,6 +11,15 @@ const HelpfulScrollbar = (props) => {
     //let mouseDownOnScroller = false;
     const [mouseDownOnScroller, setMouseDownOnScroller] = useState(false);
     const stateRef = React.useRef(mouseDownOnScroller);
+    const scrollbarContainer = React.useRef();
+    const scrollContainer = React.useRef();
+
+    //Needs to occur after scrollbarContainer and scrollContainer so the values can be used.
+    let maxScroll;
+    if (scrollbarContainer.current !== undefined && scrollContainer.current !== undefined) {
+        maxScroll = Number.parseFloat(scrollbarContainer.current.clientHeight) - Number.parseFloat(scrollContainer.current.clientHeight);
+    }
+
     const [scrollerTop, setScrollerTop] = useState(0);
     const [height, setHeight] = useState(0);
     useEffect(() => {
@@ -29,12 +38,21 @@ const HelpfulScrollbar = (props) => {
             scrollCurrentY = event.clientY;
             console.log(scrollCurrentY);
             let deltaY = scrollCurrentY - scrollStartY;
+            let stringScrollerTop = document.getElementById("scrollContainer").style.top;
+            let scrollerTop = Number.parseFloat(stringScrollerTop.substring(0,stringScrollerTop.length-2));
+            if (scrollerTop + deltaY < 0) {
+                setScrollerTop(0);
+                console.log("set top to 0");
+            }
             setScrollerTop(deltaY);
+            //console.log("deltaY: " + deltaY);
         }
     }
 
     const callback_setScrollHeight = () => {
-
+        if (scrollContainer.current !== undefined) {
+            props.getScrollHeightCallback(scrollerTop/maxScroll);
+        } 
     }
 
     const scrollerOnMouseDown = (event) => {
@@ -54,10 +72,21 @@ const HelpfulScrollbar = (props) => {
         //console.log("MouseDown: " + mouseDownOnScroller);
     }
 
+    let top = scrollerTop;
+    if (scrollerTop<0) {
+        top=0;
+    } else if (scrollerTop>maxScroll) {
+        top=maxScroll;
+    }
+
+    //DEBUG
+    if (scrollContainer.current !== undefined)
+        console.log("Scroll percent: " + Number.parseFloat(scrollContainer.current.style.top)/maxScroll);
+
     return(
-        <div className={styles.container}>
-            <div className={styles.scrollContainer} 
-            style={{position:"relative", top:(scrollerTop), height:{scrollerHeight}, minHeight:"20px", maxHeight:"100px"}} 
+        <div id="scrollbarContainer" ref={scrollbarContainer} className={styles.container}>
+            <div id="scrollContainer" ref={scrollContainer} className={styles.scrollContainer} 
+            style={{position:"relative", top:top+"px", height:{scrollerHeight}, minHeight:"20px", maxHeight:"100px"}} 
             onMouseDown={scrollerOnMouseDown} 
             /*onMouseUp={scrollerOnMouseUp}*/></div>
         </div>
